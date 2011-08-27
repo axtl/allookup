@@ -74,3 +74,7 @@ Compare with:
 		Address: 74.125.127.18
 		Name:	googlemail.l.google.com
 		Address: 74.125.127.19
+
+## License
+
+[The MIT License](http://www.opensource.org/licenses/mit-license.html)

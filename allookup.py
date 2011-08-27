@@ -8,7 +8,10 @@ import sys
 from socket import gethostbyaddr, gethostbyname_ex
 
 
-DESCRIPTION = "Find all related IPs and hostnames for the given host"
+DESCRIPTION = \
+    "Queries for known hostnames/IP addresses of the given\
+    hostname/IP argument(s)\
+    "
 
 
 class memoize(object):
@@ -42,7 +45,7 @@ class memoize(object):
         return functools.partial(self.__call__, obj)
 
 
-def _is_ip_addr(addr):
+def _is_ip(addr):
     """Attempt to identify if @addr is a valid IP4/6 address."""
     try:
         socket.inet_pton(socket.AF_INET6, addr)
@@ -61,14 +64,17 @@ def _related_names(addr):
     if addr.endswith('.arpa'):
         return set()
     else:
-        fun = gethostbyaddr if _is_ip_addr(addr) else gethostbyname_ex
-        (cname, aliases, ips) = fun(addr)
+        fn = socket.gethostbyaddr if _is_ip(addr) else socket.gethostbyname_ex
+        (cname, aliases, ips) = fn(addr)
         aliases.append(cname)
         aliases.extend(ips)
         return set(aliases)
 
 
-def _server_names(addr):
+def server_names(addr):
+    """Obtain all names that are associated with a given address.
+    Returns a set of IPs and hostnames.
+    """
     names = set([addr])
     # track if new entries need to be looked at for related names
     new_entries = True
@@ -90,7 +96,7 @@ def main(argv):
     parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument('-a', '--address',
         action='append',
-        help='The hostname/IP address to search.')
+        help='The hostname/IP address to search (option can be repeated)')
 
     # create namespace with args
     if len(argv) == 0:
@@ -100,7 +106,7 @@ def main(argv):
     ns = parser.parse_args(args=argv)
 
     for addr in ns.address:
-        names = _server_names(addr)
+        names = server_names(addr)
         sys.stdout.write('%s is known as:\n\n' % addr)
         for name in names:
             sys.stdout.write('\t%s\n' % name)

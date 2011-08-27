@@ -2,9 +2,27 @@
 
 `allookup` attempts to find all known hostnames and IPv4 addresses for the hostname/IP argument(s) passed to it, and does so recursively on each answer until no more can be found.
 
+It can be used stand-alone (as a shell utility), or as a Python module.
+
 ## Usage
 
-	allookup -a mail.google.com -a 127.0.0.1
+### Shell
+
+	$ allookup -h
+	usage: allookup [-h] [-a ADDRESS]
+
+	Queries for known hostnames/IP addresses of the given hostname/IP argument(s)
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -a ADDRESS, --address ADDRESS
+                            The hostname/IP address to search (option can be repeated)
+
+### Python
+
+	import allookup
+	allookup.server_names(addr) # can be IP or hostname
+	# returns a set of hostnames and IPs
 
 ## Output
 
@@ -27,6 +45,9 @@
             83.53.125.74.in-addr.arpa
             19.53.125.74.in-addr.arpa
             18.53.125.74.in-addr.arpa
+
+Compare with:
+
 * `host`:
 
 		$ host mail.google.com

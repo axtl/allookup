@@ -9,14 +9,15 @@ It can be used stand-alone (as a shell utility), or as a Python module.
 ### Shell
 
 	$ allookup -h
-	usage: allookup [-h] [-a ADDRESS]
+	usage: allookup [-h] ADDRESS [ADDRESS ...]
 
-	Queries for known hostnames/IP addresses of the given hostname/IP argument(s)
+    Queries for known hostnames/IP addresses of the given hostname/IP argument(s)
+
+    positional arguments:
+      ADDRESS     an address to lookup
 
     optional arguments:
-      -h, --help            show this help message and exit
-      -a ADDRESS, --address ADDRESS
-                            The hostname/IP address to search (option can be repeated)
+      -h, --help  show this help message and exit
 
 ### Python
 
@@ -28,7 +29,7 @@ It can be used stand-alone (as a shell utility), or as a Python module.
 
 * `allookup`:
 
-		$ allookup.py -a mail.google.com
+		$ allookup.py mail.google.com
 		mail.google.com is known as:
 
             74.125.53.83

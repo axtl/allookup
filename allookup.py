@@ -94,9 +94,8 @@ def server_names(addr):
 def main(argv):
     # setup and parse arguments
     parser = argparse.ArgumentParser(description=DESCRIPTION)
-    parser.add_argument('-a', '--address',
-        action='append',
-        help='The hostname/IP address to search (option can be repeated)')
+    parser.add_argument('addresses', metavar='ADDRESS', type=str, nargs='+',
+                       help='an address to lookup')
 
     # create namespace with args
     if len(argv) == 0:
@@ -105,7 +104,7 @@ def main(argv):
 
     ns = parser.parse_args(args=argv)
 
-    for addr in ns.address:
+    for addr in ns.addresses:
         names = server_names(addr)
         sys.stdout.write('%s is known as:\n\n' % addr)
         for name in names:

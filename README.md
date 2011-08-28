@@ -9,72 +9,46 @@ It can be used stand-alone (as a shell utility), or as a Python module.
 ### Shell
 
 	$ allookup -h
-	usage: allookup [-h] ADDRESS [ADDRESS ...]
+	usage: allookup [-h] [-a] ADDRESS [ADDRESS ...]
 
     Queries for known hostnames/IP addresses of the given hostname/IP argument(s)
 
     positional arguments:
-      ADDRESS     an address to lookup
+		ADDRESS     an address to lookup
 
     optional arguments:
-      -h, --help  show this help message and exit
+		-h, --help  show this help message and exit
+		-a, --arpa  Display .arpa addresses
 
 ### Python
 
 	import allookup
-	allookup.server_names(addr) # can be IP or hostname
-	# returns a set of hostnames and IPs
+	allookup.server_names(addr, show_arpa)
+	"""Obtain all names that are associated with a given address.
+
+    Keyword arguments:
+    addr -- the address to explore (as IP or hostname)
+    show_arpa -- include .arpa addresses (boolean, defaults to False)
+    
+    Returns a set containing the explored IPs and hostnames.
+    """
 
 ## Output
 
-* `allookup`:
+	$ allookup mail.google.com
+	mail.google.com is known as:
 
-		$ allookup.py mail.google.com
-		mail.google.com is known as:
-
-            74.125.53.83
-            googlemail.l.google.com
-            74.125.53.18
-            74.125.53.19
-            74.125.53.17
-            pw-in-f18.1e100.net
-            17.53.125.74.in-addr.arpa
-            pw-in-f17.1e100.net
-            mail.google.com
-            pw-in-f83.1e100.net
-            pw-in-f19.1e100.net
-            83.53.125.74.in-addr.arpa
-            19.53.125.74.in-addr.arpa
-            18.53.125.74.in-addr.arpa
-
-Compare with:
-
-* `host`:
-
-		$ host mail.google.com
-		mail.google.com is an alias for googlemail.l.google.com.
-		googlemail.l.google.com has address 74.125.127.19
-		googlemail.l.google.com has address 74.125.127.83
-		googlemail.l.google.com has address 74.125.127.17
-		googlemail.l.google.com has address 74.125.127.18
-
-* `nslookup`:
-
-		$ nslookup mail.google.com
-		Server:		198.162.52.58
-		Address:	198.162.52.58#53
-		
-		Non-authoritative answer:
-		mail.google.com	canonical name = googlemail.l.google.com.
-		Name:	googlemail.l.google.com
-		Address: 74.125.127.83
-		Name:	googlemail.l.google.com
-		Address: 74.125.127.17
-		Name:	googlemail.l.google.com
-		Address: 74.125.127.18
-		Name:	googlemail.l.google.com
-		Address: 74.125.127.19
-
+		74.125.53.83
+		googlemail.l.google.com
+		74.125.53.18
+		74.125.53.19
+		74.125.53.17
+		pw-in-f18.1e100.net
+		pw-in-f17.1e100.net
+		mail.google.com
+		pw-in-f83.1e100.net
+		pw-in-f19.1e100.net
+      
 ## License
 
 [The MIT License](http://www.opensource.org/licenses/mit-license.html)

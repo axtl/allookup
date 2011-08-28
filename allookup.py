@@ -91,9 +91,14 @@ def _related_names(addr):
         return set(aliases)
 
 
-def server_names(addr):
+def server_names(addr, show_arpa=False):
     """Obtain all names that are associated with a given address.
-    Returns a set of IPs and hostnames.
+
+    Keyword arguments:
+    addr -- the address to explore (as IP or hostname)
+    show_arpa -- include .arpa addresses (boolean, defaults to False)
+    
+    Returns a set containing the explored IPs and hostnames.
     """
     names = set([addr])
     # track if new entries need to be looked at for related names
@@ -108,12 +113,17 @@ def server_names(addr):
         new_size = len(names)
         new_entries = old_size != new_size
 
+    if not show_arpa:
+        names = set([n for n in names if not n.endswith('.arpa')])
     return names
 
 
 def main(argv):
     # setup and parse arguments
     parser = argparse.ArgumentParser(description=DESCRIPTION)
+    parser.add_argument('-a', '--arpa',
+        action='store_true',
+        help='Display .arpa addresses')
     parser.add_argument('addresses', metavar='ADDRESS', type=str, nargs='+',
                        help='an address to lookup')
 
@@ -125,7 +135,7 @@ def main(argv):
     ns = parser.parse_args(args=argv)
 
     for addr in ns.addresses:
-        names = server_names(addr)
+        names = server_names(addr, show_arpa=ns.arpa)
         sys.stdout.write('%s is known as:\n\n' % addr)
         for name in names:
             sys.stdout.write('\t%s\n' % name)

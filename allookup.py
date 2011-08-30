@@ -80,15 +80,23 @@ def _is_ip(addr):
 
 @memoize
 def _related_names(addr):
-    # Not meant to be resolvable
-    if addr.endswith('.arpa'):
-        return set()
-    else:
-        fn = socket.gethostbyaddr if _is_ip(addr) else socket.gethostbyname_ex
+    fn = socket.gethostbyaddr if _is_ip(addr) else socket.gethostbyname_ex
+    try:
         (cname, aliases, ips) = fn(addr)
         aliases.append(cname)
         aliases.extend(ips)
         return set(aliases)
+    except (socket.herror, socket.gaierror):
+        # herror raised for certain IP addresses that don't have rDNS
+        # gaierror raised for .arpa addresses
+        return set()
+
+
+def names_for_servers(addr_list, show_arpa=False):
+    result = set()
+    for addr in addr_list:
+        result.update(server_names(addr, show_arpa))
+    return result
 
 
 def server_names(addr, show_arpa=False):
